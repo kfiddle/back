@@ -5,15 +5,18 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const instRoutes = require('./routes/inst-routes');
+const instsRoutes = require('./routes/inst-routes');
 const piecesRoutes = require('./routes/piece-routes');
+const playersRoutes = require('./routes/player-routes');
+
 
 
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use("/insts/", instRoutes);
+app.use("/insts/", instsRoutes);
 app.use('/pieces/', piecesRoutes);
+app.use('/players/', playersRoutes);
 
 app.use('*', (req, res, next) => {
   return next({

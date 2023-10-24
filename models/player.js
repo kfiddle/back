@@ -8,12 +8,12 @@ const mongoose = require('mongoose');
 // .addInst(insts.bassClarinet)
 // .setEmail('dbb@Email'),
 
-
 const playerSchema = new mongoose.Schema({
   first: { type: String, required: true },
   last: { type: String, required: true },
   email: { type: String, required: true },
-  phone: { type: String, required: true },
+  insts: [{ type: mongoose.Types.ObjectId, required: true, ref: 'Inst' }],
+  phone: String,
   type: { type: String, enum: ['sub', 'contract'] },
   rank: Number,
   addressLine1: String,

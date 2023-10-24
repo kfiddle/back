@@ -1,5 +1,6 @@
 const Player = require('../models/player');
 const Inst = require('../models/inst');
+const HttpError = require('../utils/http-error');
 
 const allPlayers = [
   {
@@ -512,7 +513,8 @@ const allPlayers = [
 
 const createAllFromList = async () => {
   for (let player of allPlayers) {
-    let instsToAdd = player.insts;
+    let instsToAdd = [...player.insts];
+    let { first, last, email, type, rank } = player;
     const newPlayer = new Player({
       first,
       last,
@@ -521,20 +523,25 @@ const createAllFromList = async () => {
       rank,
     });
 
+    let storedInsts = [];
+
     try {
       await newPlayer.save();
-    } catch (err) {
-      return next(new HttpError('could not create player', 500));
-    }
-
-    for (let instName of instsToAdd) {
-      try {
-        const inst = await Inst.find({ name: instName });
-        if (!inst.players.includes(newPlayer)) inst.players.push(newPlayer);
-        await inst.save();
-      } catch (error) {
-        return next(new HttpError('could not locate instrument of id  ' + instId, 404));
+      for (let instName of instsToAdd) {
+        try {
+          const inst = await Inst.find({ name: instName });
+          storedInsts.push(inst);
+        } catch (err) {
+          console.log(err);
+        }
       }
+
+      for (let inst of storedInsts) {
+        inst.players.push(newPlayer);
+        await inst.save();
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 };

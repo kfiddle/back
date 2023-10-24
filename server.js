@@ -5,11 +5,13 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+const createAllFromList = require('./controllers/create-players-list');
+
 const instsRoutes = require('./routes/inst-routes');
 const piecesRoutes = require('./routes/piece-routes');
 const playersRoutes = require('./routes/player-routes');
 
-
+createAllFromList();
 
 app.use(bodyParser.json());
 app.use(cors());

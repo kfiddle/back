@@ -1,4 +1,5 @@
 const Piece = require('../models/piece');
+const Gig = require('../models/gig');
 const HttpError = require('../utils/http-error');
 
 const createPiece = async (req, res, next) => {
@@ -46,4 +47,24 @@ const createPieces = async (req, res, next) => {
   }
 };
 
-module.exports = { createPiece, getAllPieces, createPieces };
+const findPiecesByGigId = async (req, res, next) => {
+  try {
+    const { gigId } = req.params.gid;
+    console.log(gigId);
+    const gig = await Gig.findById(gigId);
+
+    if (!gig) {
+      return res.status(404).json({ error: 'Gig not found' });
+    }
+
+    const pieceIds = gig.program;
+    const pieces = await Piece.find({ _id: { $in: pieceIds } });
+
+    res.json(pieces);
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ error: 'An error occurred finding the program of this gig' });
+  }
+}
+
+module.exports = { createPiece, getAllPieces, createPieces, findPiecesByGigId };

@@ -3,7 +3,8 @@ const pieceController = require("../controllers/piece-controller");
 
 const router = express.Router();
 
-router.get('/', pieceController.getAllPieces)
+router.get('/', pieceController.getAllPieces);
+router.get('/find_by_gig/:gid', pieceController.findPiecesByGigId)
 
 router.post('/array', pieceController.createPieces);
 

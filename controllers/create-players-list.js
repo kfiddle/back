@@ -64,7 +64,7 @@ const allPlayers = [
     last: 'Boutin-Bourque',
     type: 'contract',
     rank: 3,
-    insts: ['clarinet', 'bassClarinet'],
+    insts: ['clarinet', 'bass clarinet'],
     email: 'dbb@Email',
   },
   {
@@ -72,7 +72,7 @@ const allPlayers = [
     last: 'DiBari-Oberle',
     type: 'contract',
     rank: 4,
-    insts: ['clarinet', 'Ebcl'],
+    insts: ['clarinet', 'Eb clarinet'],
     email: 'kenjfiddle@gmail.com',
   },
   {
@@ -168,7 +168,7 @@ const allPlayers = [
     last: 'Bessette',
     type: 'contract',
     rank: 1,
-    insts: ['bassTromb'],
+    insts: ['bass trombone'],
     email: 'kenjfiddle@gmail.com',
   },
   {
@@ -224,6 +224,8 @@ const allPlayers = [
     last: 'Leal-Santiesteban',
     type: 'contract',
     rank: 2,
+    email: 'minjuk622@gmail.com',
+
     insts: ['violin1'],
   },
   {
@@ -231,6 +233,7 @@ const allPlayers = [
     last: 'Huang',
     type: 'contract',
     rank: 3,
+    email: 'minjuk622@gmail.com',
     insts: ['violin1'],
   },
   {
@@ -238,12 +241,15 @@ const allPlayers = [
     last: 'Hernandez',
     type: 'contract',
     rank: 3,
+    email: 'minjuk622@gmail.com',
     insts: ['violin1'],
   },
   {
     first: 'Alexander',
     last: 'Hettinga',
     type: 'contract',
+    email: 'minjuk622@gmail.com',
+
     rank: 3,
     insts: ['violin1'],
   },
@@ -251,6 +257,8 @@ const allPlayers = [
     first: 'Stefanie',
     last: 'Schore',
     type: 'contract',
+    email: 'minjuk622@gmail.com',
+
     rank: 3,
     insts: ['violin1'],
   },
@@ -364,7 +372,9 @@ const allPlayers = [
     type: 'contract',
     rank: 3,
     insts: ['viola'],
+    email: 'kenjfiddle@gmail.com',
   },
+
   {
     first: 'Benjamin',
     last: 'Schantz',
@@ -513,7 +523,16 @@ const allPlayers = [
 
 const createAllFromList = async () => {
   for (let player of allPlayers) {
-    let instsToAdd = [...player.insts];
+    let playersInsts = [];
+    try {
+      for (let inst of player.insts) {
+        let foundInst = await Inst.findOne({ name: inst });
+        playersInsts.push(foundInst._id);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
     let { first, last, email, type, rank } = player;
     const newPlayer = new Player({
       first,
@@ -521,24 +540,16 @@ const createAllFromList = async () => {
       email,
       type,
       rank,
+      insts: playersInsts,
     });
-
-    let storedInsts = [];
 
     try {
       await newPlayer.save();
-      for (let instName of instsToAdd) {
-        try {
-          const inst = await Inst.find({ name: instName });
-          storedInsts.push(inst);
-        } catch (err) {
-          console.log(err);
-        }
-      }
 
-      for (let inst of storedInsts) {
-        inst.players.push(newPlayer);
-        await inst.save();
+      for (let instId of playersInsts) {
+        let foundInst = await Inst.findById(instId);
+        foundInst.players.push(newPlayer.id);
+        await foundInst.save();
       }
     } catch (err) {
       console.log(err);

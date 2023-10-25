@@ -3,7 +3,6 @@ const Inst = require('../models/inst');
 const HttpError = require('../utils/http-error');
 
 const createPlayer = async (req, res, next) => {
-  console.log(req.body);
   const { first, last, email, insts, phone, type, addressLine1, addressLine2, city, state, zip } = req.body;
   if (!first || !last) return new HttpError('insufficient input to store player', 404);
 
@@ -11,6 +10,12 @@ const createPlayer = async (req, res, next) => {
     const createdPlayer = new Player({ first, last, email, insts, phone, type, addressLine1, addressLine2, city, state, zip });
     await createdPlayer.save();
     res.status(201).json({ player: createdPlayer.toObject({ getters: true }) });
+
+    for (let instId of insts) {
+      let foundInst = await Inst.findById(instId);
+      foundInst.players.push(createdPlayer.id);
+      await foundInst.save();
+    }
   } catch (err) {
     return next(new HttpError('could not create player', 500));
   }
@@ -28,6 +33,40 @@ const getPlayerById = async (req, res, next) => {
   }
 
   res.status(201).json({ player: player.toObject({ getters: true }) });
+};
+
+
+const findPlayersByInstId = async (req, res) => {
+  try {
+    const instId = req.params.iid;
+    const players = await Player.find({ insts: instId });
+    res.json(players);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
+
+const getPlayersById = async (req, res, next) => {
+  try {
+    const { ids } = req.body;
+    console.log(ids);
+    if (!ids) return new HttpError('insufficient input to retrieve players', 404);
+
+    let playersToReturn = [];
+
+    for (let id of ids) {
+      try {
+        let player = await Player.findById(id);
+        playersToReturn.push(player);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    res.status(201).json(playersToReturn);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const getAllPlayers = async (req, res, next) => {
@@ -96,4 +135,6 @@ module.exports = {
   getAllPlayers,
   addInstsForPlayer,
   getPlayersBySort,
+  getPlayersById,
+  findPlayersByInstId
 };

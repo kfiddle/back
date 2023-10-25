@@ -6,12 +6,14 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const listCreator = require('./controllers/create-players-list');
+const instController = require('./controllers/inst-controller');
 
 const instsRoutes = require('./routes/inst-routes');
 const piecesRoutes = require('./routes/piece-routes');
 const playersRoutes = require('./routes/player-routes');
 
 // listCreator.createAllFromList();
+// instController.deleteNullPlayerIds();
 
 app.use(bodyParser.json());
 app.use(cors());

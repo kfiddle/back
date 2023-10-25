@@ -64,4 +64,8 @@ const getPlayersOfInst = async (req, res, next) => {
   });
 };
 
-module.exports = { createInst, getInstById, getAllInsts };
+const deleteNullPlayerIds = async () => {
+  // await Inst.updateMany({}, { $unset: { players: true } });
+};
+
+module.exports = { createInst, getInstById, getAllInsts, deleteNullPlayerIds };

@@ -7,7 +7,7 @@ controller.getAllGigs = async (req, res, next) => {
     let gigs = await Gig.find();
     res.json(gigs.map((gig) => gig.toObject({ getters: true })));
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return next(new HttpError('could not retrieve all gigs from database', 404));
   }
 };
@@ -31,10 +31,32 @@ controller.createGig = async (req, res) => {
   }
 };
 
-controller.getGigById = async (req, res, next) => {};
+controller.getGigById = async (req, res, next) => {
+  try {
+    const { gid } = req.params;
+    const storedGig = await Gig.findById(gid);
+    res.status(201).json(storedGig)
 
-controller.updateGig = async (req, res, next) => {};
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error occurred retrieving this Gig' });
+  }
+};
 
-controller.deleteGigById = async (req, res, next) => {};
+controller.updateGig = async (req, res, next) => {
+  try {
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error occurred updating this Gig' });
+  }
+};
+
+controller.deleteGigById = async (req, res, next) => {
+  try {
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error occurred deleting this Gig' });
+  }
+};
 
 module.exports = controller;

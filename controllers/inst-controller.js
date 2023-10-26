@@ -2,8 +2,6 @@ const Inst = require('../models/inst');
 const HttpError = require('../utils/http-error');
 
 const createInst = async (req, res, next) => {
-  console.log(req.body, 'here safe');
-
   const { name, abbreviation } = req.body;
 
   const previousNameInst = await Inst.findOne({ name });

@@ -12,6 +12,7 @@ const instsRoutes = require('./routes/inst-routes');
 const piecesRoutes = require('./routes/piece-routes');
 const playersRoutes = require('./routes/player-routes');
 const gigsRoutes = require('./routes/gig-routes');
+const chairsRoutes = require('./routes/chair-routes');
 
 // listCreator.createAllFromList();
 // instController.deleteNullPlayerIds();
@@ -23,6 +24,8 @@ app.use("/insts/", instsRoutes);
 app.use('/pieces/', piecesRoutes);
 app.use('/players/', playersRoutes);
 app.use('/gigs/', gigsRoutes);
+app.use('/chairs/', chairsRoutes);
+
 
 app.use('*', (req, res, next) => {
   return next({

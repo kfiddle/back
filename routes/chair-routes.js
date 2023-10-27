@@ -6,7 +6,8 @@ const router = express.Router();
 router.get('/by_gig_and_num', chairController.getChairsByGigPieceNum)
 router.get('/', chairController.getAllChairs)
 
-router.post('/', chairController.createChair)
+// router.post('/by_array', chairController.createChairs);
+router.post('/', chairController.createChairs)
 
 router.get("/:iid", chairController.getChairById);
 

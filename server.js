@@ -13,6 +13,7 @@ const piecesRoutes = require('./routes/piece-routes');
 const playersRoutes = require('./routes/player-routes');
 const gigsRoutes = require('./routes/gig-routes');
 const chairsRoutes = require('./routes/chair-routes');
+const danielsRoutes = require('./routes/daniels-routes')
 
 // listCreator.createAllFromList();
 // instController.deleteNullPlayerIds();
@@ -25,6 +26,8 @@ app.use('/pieces/', piecesRoutes);
 app.use('/players/', playersRoutes);
 app.use('/gigs/', gigsRoutes);
 app.use('/chairs/', chairsRoutes);
+app.use('/daniels_query/', danielsRoutes)
+
 
 
 app.use('*', (req, res, next) => {

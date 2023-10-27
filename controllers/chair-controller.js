@@ -1,5 +1,5 @@
 const Chair = require('../models/chair');
-const Gig = require('../models/gig')
+const Gig = require('../models/gig');
 
 const controller = {};
 
@@ -32,6 +32,21 @@ controller.createChair = async (req, res) => {
   }
 };
 
+controller.createChairs = async (req, res, next) => {
+  const chairsData = req.body; // Assuming the request body is an array of pieces
+  console.log(chairsData)
+  if (!Array.isArray(chairsData) || chairsData.length === 0) {
+    res.status(500).json({ error: 'Insufficient input to save chairs' });
+  }
+
+  try {
+    const createdChairs = await Chair.insertMany(chairsData);
+    res.status(201).json({ chairs: createdChairs });
+  } catch (err) {
+    res.status(500).json({ error: 'An error occurred saving chairs' });
+  }
+};
+
 controller.getChairById = async (req, res, next) => {
   try {
     const { gid } = req.params;
@@ -53,7 +68,7 @@ controller.getChairsByGigPieceNum = async (req, res, next) => {
     }
 
     const chairs = await Chair.find({ gig: gig.id, pieceNum });
-    res.status(201).json(chairs.map(chair => chair.toObject({ getters: true })));
+    res.status(201).json(chairs.map((chair) => chair.toObject({ getters: true })));
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'An error occurred retrieving this roster' });

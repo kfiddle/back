@@ -2,12 +2,28 @@ const Player = require('../models/player');
 const Inst = require('../models/inst');
 const HttpError = require('../utils/http-error');
 
-const createPlayer = async (req, res, next) => {
-  const { first, last, email, insts, phone, type, addressLine1, addressLine2, city, state, zip } = req.body;
+const controller = {};
+
+controller.createPlayer = async (req, res, next) => {
+  const { first, last, email, insts, phone, username, password, type, addressLine1, addressLine2, city, state, zip } = req.body;
   if (!first || !last) return new HttpError('insufficient input to store player', 404);
 
   try {
-    const createdPlayer = new Player({ first, last, email, insts, phone, type, addressLine1, addressLine2, city, state, zip });
+    const createdPlayer = new Player({
+      first,
+      last,
+      email,
+      insts,
+      phone,
+      username,
+      password,
+      type,
+      addressLine1,
+      addressLine2,
+      city,
+      state,
+      zip,
+    });
     await createdPlayer.save();
     res.status(201).json({ player: createdPlayer.toObject({ getters: true }) });
 
@@ -21,7 +37,7 @@ const createPlayer = async (req, res, next) => {
   }
 };
 
-const getPlayerById = async (req, res, next) => {
+controller.getPlayerById = async (req, res, next) => {
   const playerId = req.params.pid;
 
   let player;
@@ -35,8 +51,7 @@ const getPlayerById = async (req, res, next) => {
   res.status(201).json({ player: player.toObject({ getters: true }) });
 };
 
-
-const findPlayersByInstId = async (req, res) => {
+controller.findPlayersByInstId = async (req, res) => {
   try {
     const instId = req.params.iid;
     const players = await Player.find({ insts: instId });
@@ -46,11 +61,9 @@ const findPlayersByInstId = async (req, res) => {
   }
 };
 
-
-const getPlayersById = async (req, res, next) => {
+controller.getPlayersById = async (req, res, next) => {
   try {
     const { ids } = req.body;
-    console.log(ids);
     if (!ids) return new HttpError('insufficient input to retrieve players', 404);
 
     let playersToReturn = [];
@@ -69,7 +82,7 @@ const getPlayersById = async (req, res, next) => {
   }
 };
 
-const getAllPlayers = async (req, res, next) => {
+controller.getAllPlayers = async (req, res, next) => {
   let players;
   try {
     players = await Player.find();
@@ -81,7 +94,29 @@ const getAllPlayers = async (req, res, next) => {
   }
 };
 
-const addInstsForPlayer = async (req, res, next) => {
+controller.getAllContractedPlayers = async (req, res, next) => {
+  try {
+    let players = await Player.find({ type: 'contract' });
+    res.json({
+      players: players.map((player) => player.toObject({ getters: true })),
+    });
+  } catch (err) {
+    return next(new HttpError('could not get all players', 404));
+  }
+};
+
+controller.getAllSubs = async (req, res, next) => {
+  try {
+    let players = await Player.find({ type: 'sub' });
+    res.json({
+      players: players.map((player) => player.toObject({ getters: true })),
+    });
+  } catch (err) {
+    return next(new HttpError('could not get all players', 404));
+  }
+};
+
+controller.addInstsForPlayer = async (req, res, next) => {
   const playerId = req.params.pid;
   const { instsList } = req.body;
 
@@ -115,7 +150,7 @@ const addInstsForPlayer = async (req, res, next) => {
   res.status(201).json({ message: 'successfully added player to instrument(s)' });
 };
 
-const getPlayersBySort = async (req, res, next) => {
+controller.getPlayersBySort = async (req, res, next) => {
   let sort = req.params.sort;
   let players;
   try {
@@ -129,12 +164,4 @@ const getPlayersBySort = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  createPlayer,
-  getPlayerById,
-  getAllPlayers,
-  addInstsForPlayer,
-  getPlayersBySort,
-  getPlayersById,
-  findPlayersByInstId
-};
+module.exports = controller;

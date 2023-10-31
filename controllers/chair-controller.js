@@ -32,6 +32,7 @@ controller.createChair = async (req, res) => {
   }
 };
 
+
 controller.createChairs = async (req, res, next) => {
   const chairsData = req.body; // Assuming the request body is an array of pieces
   console.log(chairsData)

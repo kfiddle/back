@@ -13,6 +13,7 @@ const piecesRoutes = require('./routes/piece-routes');
 const playersRoutes = require('./routes/player-routes');
 const gigsRoutes = require('./routes/gig-routes');
 const chairsRoutes = require('./routes/chair-routes');
+const messagesRoutes = require('./routes/message-routes');
 const danielsRoutes = require('./routes/daniels-routes')
 
 // listCreator.createAllFromList();
@@ -26,6 +27,7 @@ app.use('/pieces/', piecesRoutes);
 app.use('/players/', playersRoutes);
 app.use('/gigs/', gigsRoutes);
 app.use('/chairs/', chairsRoutes);
+app.use('/messages/', messagesRoutes);
 app.use('/daniels_query/', danielsRoutes)
 
 

@@ -1,13 +1,5 @@
 const mongoose = require('mongoose');
 
-// new Player('1','Leanne', 'Wistrom').setType(type.CONTRACT).setRank(1).addInst(insts.flute).setEmail('lw@Email'),
-// new Player('8','David', 'Boutin-Bourque')
-// .setType(type.CONTRACT)
-// .setRank(3)
-// .addInst(insts.clarinet)
-// .addInst(insts.bassClarinet)
-// .setEmail('dbb@Email'),
-
 const playerSchema = new mongoose.Schema({
   first: { type: String, required: true },
   last: { type: String, required: true },
@@ -16,6 +8,8 @@ const playerSchema = new mongoose.Schema({
   phone: String,
   type: { type: String, enum: ['sub', 'contract'] },
   rank: Number,
+  username: { type: String, required: true },
+  password: { type: String, required: true },
   addressLine1: String,
   addressLine2: String,
   city: String,

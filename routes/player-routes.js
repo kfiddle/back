@@ -8,7 +8,7 @@ router.get("/", playerController.getAllPlayers);
 router.get("/:pid", playerController.getPlayerById);
 
 router.post('/players_by_id', playerController.getPlayersById)
-router.post("/", playerController.createPlayer);
 router.patch("/add-insts/:pid", playerController.addInstsForPlayer);
+router.post("/", playerController.createPlayer);
 
 module.exports = router;

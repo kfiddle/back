@@ -1,4 +1,5 @@
 const Gig = require('../models/gig');
+const mongoose = require('mongoose');
 
 const controller = {};
 
@@ -14,7 +15,14 @@ controller.getAllGigs = async (req, res, next) => {
 
 controller.createGig = async (req, res) => {
   try {
-    const { title, type, program, services } = req.body;
+    const { title, type, program: incomingProgram, services } = req.body;
+    console.log(incomingProgram);
+
+    const program = incomingProgram.map((pieceId) => {
+      if (pieceId !== undefined || pieceId !== '') new mongoose.Types.ObjectId(pieceId);
+    });
+
+    console.log(program)
 
     const newGig = new Gig({
       title,
@@ -35,8 +43,7 @@ controller.getGigById = async (req, res, next) => {
   try {
     const { gid } = req.params;
     const storedGig = await Gig.findById(gid);
-    res.status(201).json(storedGig)
-
+    res.status(201).json(storedGig);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'An error occurred retrieving this Gig' });

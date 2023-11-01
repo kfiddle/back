@@ -30,6 +30,16 @@ const getAllPieces = async (req, res, next) => {
   }
 };
 
+const getPieceById = async (req, res, next) => {
+  try {
+    let { id } = req.params.pid;
+    let piece = await Piece.findById(id);
+    res.json(piece.toObject({ getters: true }));
+  } catch (err) {
+    return next(new HttpError('could not retrieve this piece', 404));
+  }
+};
+
 const createPieces = async (req, res, next) => {
   const { pieces } = req.body;
 
@@ -60,9 +70,9 @@ const findPiecesByGigId = async (req, res, next) => {
     const pieces = await Piece.find({ _id: { $in: pieceIds } });
     return res.status(201).json(pieces.map((piece) => piece.toObject({ getters: true })));
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json({ error: 'An error occurred finding the program of this gig' });
   }
-}
+};
 
-module.exports = { createPiece, getAllPieces, createPieces, findPiecesByGigId };
+module.exports = { createPiece, getAllPieces, getPieceById, createPieces, findPiecesByGigId };

@@ -9,6 +9,6 @@ router.get('/', pieceController.getAllPieces);
 router.post('/array', pieceController.createPieces);
 router.post('/', pieceController.createPiece);
 
-// router.get("/:pid", pieceController.getPieceById);
+router.get("/:pid", pieceController.getPieceById);
 
 module.exports = router;

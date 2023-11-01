@@ -10,6 +10,7 @@ const pieceSchema = new mongoose.Schema({
   arranger: String,
   otherName: String,
   publisher: String,
+  instrumentation: String,
   duration: String,
   windsBrass: String,
   vocalistSoloist: String,
@@ -19,5 +20,7 @@ const pieceSchema = new mongoose.Schema({
   sign: String,
   updated: Date,
 });
+
+
 
 module.exports = mongoose.model('Piece', pieceSchema);

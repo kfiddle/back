@@ -6,7 +6,7 @@ const controller = {};
 
 controller.createPlayer = async (req, res, next) => {
   const { first, last, email, insts, phone, username, password, type, addressLine1, addressLine2, city, state, zip } = req.body;
-  if (!first || !last) return new HttpError('insufficient input to store player', 404);
+  if (!first || !last) return next({ error: 'insufficient input to save player' });
 
   try {
     const createdPlayer = new Player({
@@ -33,7 +33,7 @@ controller.createPlayer = async (req, res, next) => {
       await foundInst.save();
     }
   } catch (err) {
-    return next(new HttpError('could not create player', 500));
+    return next({ error: 'error saving new player in player controller' });
   }
 };
 

@@ -30,11 +30,12 @@ const getAllPieces = async (req, res, next) => {
   }
 };
 
+
 const getPieceById = async (req, res, next) => {
   try {
-    let { id } = req.params.pid;
-    let piece = await Piece.findById(id);
-    res.json(piece.toObject({ getters: true }));
+    let { pid } = req.params;
+    let piece = await Piece.findById(pid);
+    res.json({ piece: piece.toObject({ getters: true }) });
   } catch (err) {
     return next(new HttpError('could not retrieve this piece', 404));
   }

@@ -15,12 +15,11 @@ controller.getAllGigs = async (req, res, next) => {
 
 controller.createGig = async (req, res) => {
   try {
-    const { title, type, program: incomingProgram, services } = req.body;
-    console.log(incomingProgram);
+    const { title, type, program, services } = req.body;
 
-    const program = incomingProgram.map((pieceId) => {
-      if (pieceId !== undefined || pieceId !== '') new mongoose.Types.ObjectId(pieceId);
-    });
+    // const program = incomingProgram.map((pieceId) => {
+    //   if (pieceId !== undefined || pieceId !== '') new mongoose.Types.ObjectId(pieceId);
+    // });
 
     console.log(program)
 
